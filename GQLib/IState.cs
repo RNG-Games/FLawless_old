@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace GQLib
 {
-    enum EState
+    public enum EState
     {
         None,
         MainMenu,
