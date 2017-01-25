@@ -39,7 +39,7 @@ namespace GQLib
         private Vector2 centrePosition;
         private float radius;
         private float angle;
-        Vector2 position = new Vector2();
+        Vector2 position;
 
         private bool alive = true;
         //constructor
