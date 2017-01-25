@@ -38,8 +38,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bullets.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="IState.cs" />
+    <Compile Include="Maths.cs" />
+    <Compile Include="Patterns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
