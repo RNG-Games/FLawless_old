@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna;
 
 namespace GQSEdit
 {
@@ -11,6 +13,7 @@ namespace GQSEdit
         static G instance;
         public Edit edits;
         //Add stuff here
+        public SpriteFont font;
 
         public G()
         {

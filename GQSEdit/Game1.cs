@@ -32,6 +32,8 @@ namespace GQSEdit
         {
             // TODO: Add your initialization logic here
             G.Instance.edits = new Edit(Content, "ProjectTest");
+            this.IsMouseVisible = true;
+
             base.Initialize();
         }
 
@@ -42,7 +44,7 @@ namespace GQSEdit
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            G.Instance.font = Content.Load <SpriteFont>("Font");
 
 
 
