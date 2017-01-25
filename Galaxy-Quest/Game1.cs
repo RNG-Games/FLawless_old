@@ -14,9 +14,14 @@ namespace Galaxy_Quest
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        int state;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.ApplyChanges();
             Content.RootDirectory = "Content";
         }
 
@@ -29,7 +34,9 @@ namespace Galaxy_Quest
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            state = -1;
+            G.Instance.current = EState.PlayState;
+            G.Instance.playState = new PlayState(Content, state);
             base.Initialize();
         }
 
@@ -41,7 +48,6 @@ namespace Galaxy_Quest
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
             // TODO: use this.Content to load your game content here
         }
 
@@ -63,7 +69,15 @@ namespace Galaxy_Quest
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            switch (G.Instance.current)
+            {
+                case EState.MainMenu:
+                    G.Instance.mainMenu.Update(gameTime);
+                    break;
+                case EState.PlayState:
+                    G.Instance.playState.Update(gameTime);
+                    break;
+            }
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -76,7 +90,15 @@ namespace Galaxy_Quest
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            switch (G.Instance.current)
+            {
+                case EState.MainMenu:
+                    G.Instance.mainMenu.Draw(spriteBatch);
+                    break;
+                case EState.PlayState:
+                    G.Instance.playState.Draw(spriteBatch);
+                    break;
+            }
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
