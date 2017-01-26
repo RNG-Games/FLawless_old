@@ -90,6 +90,7 @@ namespace Galaxy_Quest
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
             switch (G.Instance.current)
             {
                 case EState.MainMenu:
@@ -100,6 +101,7 @@ namespace Galaxy_Quest
                     break;
             }
             // TODO: Add your drawing code here
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

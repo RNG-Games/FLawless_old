@@ -18,7 +18,7 @@ namespace GQSEdit
     {
         private int scrollValue = 0;
         private string location;
-        private Texture2D bg, select, patterns;
+        private Texture2D overlay, bg, select, patterns;
         private Button selectButton, patternsButton, saveButton;
         private int currentState = 0;
         private int timeSteps = 5;
@@ -30,7 +30,7 @@ namespace GQSEdit
         private static int stageLeadIn = 2000;
 
         //Design attributes
-        private String background = "bg.png";
+        private string background = "editor_bg";
 
         //Object attributes
         private BigInteger currentTime = stageLeadIn;
@@ -46,7 +46,8 @@ namespace GQSEdit
 
         public void LoadContent(ContentManager Content)
         {
-            bg = Content.Load<Texture2D>("editor_bg");
+            overlay = Content.Load<Texture2D>("editor_overlay");
+            bg = Content.Load<Texture2D>(background);
             select = Content.Load<Texture2D>("select");
             patterns = Content.Load<Texture2D>("patterns");
             selectButton = new Button(select, select, select, new Vector2(900, 200), EBState.active , true);
@@ -56,10 +57,12 @@ namespace GQSEdit
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(bg, new Vector2(0), Color.White);
+            spriteBatch.Draw(overlay, new Vector2(0), Color.White);
             selectButton.Draw(spriteBatch);
             patternsButton.Draw(spriteBatch);
             //spriteBatch.DrawString(G.Instance.font,"" + currentState, new Vector2(900, 10), Color.White);
-            spriteBatch.DrawString(G.Instance.font, "Time: " + currentTime, new Vector2(850, 20), Color.White);
+            spriteBatch.DrawString(G.Instance.font, "[Time Properties]", new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(G.Instance.font, $"Current Time: {currentTime}", new Vector2(10, 30), Color.White);
         }
 
         public void Update(GameTime gameTime)

@@ -43,6 +43,7 @@
     <Compile Include="IState.cs" />
     <Compile Include="Maths.cs" />
     <Compile Include="Patterns.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
