@@ -42,6 +42,8 @@
     <Compile Include="Button.cs" />
     <Compile Include="IState.cs" />
     <Compile Include="Maths.cs" />
+    <Compile Include="Pattern Characteristics\BulletMovement.cs" />
+    <Compile Include="Pattern Characteristics\SpawnBehaviour.cs" />
     <Compile Include="Patterns.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

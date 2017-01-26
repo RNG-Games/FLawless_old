@@ -7,90 +7,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using GQLib.Pattern_Characteristics;
 
 namespace GQLib
 {
     abstract class Patterns
     {
+        //attributes
+        protected int bulletType;
+        
+        //help attributes
+        protected List<Bullets> Pattern = new List<Bullets>();
 
-        /// <summary>
-        /// Patternzustand updaten
-        /// </summary>
-        public abstract void Update();
-        public abstract void Draw(SpriteBatch spriteBatch);
-    }
-    class PolarPatterns : Patterns
-    {
-        int typeOB;
-        int n;
-        float accelerationOB;
-        float angleChangeOB;
-        float startSpeedOB;
-        float angleChangeOS;
-        int interval;
-        Vector2 spawnPosition;
-        float angle;
-        List<PolarBullet> Pattern = new List<PolarBullet>();
-        int timer;
-        int counter;
-        private String path;
-        private ContentManager Content;
+        //monogame
+        protected String path;
+        protected ContentManager Content;
 
-        public PolarPatterns(int typeOB, int numberOB, int intervalOS, float accelerationOB, float startAngleOS, float angleChangeOB, float startSpeedOB, Vector2 spawnPosition, String texturePath, ContentManager content, float angleChangeOS)
+        public virtual void Update()
         {
-            this.typeOB = typeOB;
-            n = numberOB;
-            this.spawnPosition = spawnPosition;
-            this.accelerationOB = accelerationOB;
-            this.angleChangeOB = angleChangeOB;
-            this.startSpeedOB = startSpeedOB;
-            this.angleChangeOS = angleChangeOS;
-            interval = intervalOS;
-            angle = startAngleOS;
-            Content = content;
-            path = texturePath;
-        }
-
-        public PolarPatterns(int typeOB, int numberOB, int intervalOS, float accelerationOB, float startAngleOS, float angleChangeOB, float startSpeedOB, Vector2 spawnPosition, String texturePath, ContentManager content)
-        {
-            this.typeOB = typeOB;
-            n = numberOB;
-            this.spawnPosition = spawnPosition;
-            this.accelerationOB = accelerationOB;
-            this.angleChangeOB = angleChangeOB;
-            this.startSpeedOB = startSpeedOB;
-            interval = intervalOS;
-            angleChangeOS = 360 / n;
-            angle = startAngleOS;
-            Content = content;
-            path = texturePath;
-        }
-
-        public override void Update()
-        {
-
-            //initalize the pattern
-            if ((interval != 0) && (timer % interval == 0) && (counter <= n))
-            {
-                //create new bullets one by one
-                angle += angleChangeOS;
-                Pattern.Add(new PolarBullet(typeOB, path, startSpeedOB, angleChangeOB, accelerationOB, spawnPosition, angle, Content));
-                counter++;
-            }
-            else if ((counter <= n) && (interval == 0))
-            {
-
-                //create n new bullets at once
-                for (int i = 0; i < n; i++)
-                {
-
-                    Pattern.Add(new PolarBullet(typeOB, path, startSpeedOB, angleChangeOB, accelerationOB, spawnPosition, angle + i * angleChangeOS, Content));
-                    counter++;
-                }
-
-            }
-
-            //update the pattern
             for (int i = Pattern.Count - 1; i >= 0; i--)
             {
                 if (Pattern[i].getPosition().X > 1000 || Pattern[i].getPosition().X < -100 || Pattern[i].getPosition().Y > 700 || Pattern[i].getPosition().Y < -100)
@@ -101,18 +35,78 @@ namespace GQLib
                 else if (Pattern[i].getAlive() == false) { Pattern.RemoveAt(i); }
                 else { Pattern[i].Update(); }
             }
-
-            //tick counter
-            timer++;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (PolarBullet i in Pattern)
+            foreach (Bullets i in Pattern)
             {
                 i.Draw(spriteBatch);
             }
         }
     }
 
+    abstract class PolarPatterns : Patterns
+    {
+        protected Vector2 spawnPosition;
+        protected int numberOfBullets;
+        protected PolarBulletMovement bulletMovement;
+    }
+
+    class SpiralPatterns : PolarPatterns
+    {
+        SpawnBehaviour spawnBehaviour;
+        int counter;
+        int timer;
+        float angle;
+
+        public SpiralPatterns (int bulletType, PolarBulletMovement bulletMovement, Vector2 spawnPosition, int numberOfBullets, SpawnBehaviour spawnBehaviour)
+        {
+            this.bulletType = bulletType;
+            this.bulletMovement = bulletMovement;
+            this.spawnPosition = spawnPosition;
+            this.numberOfBullets = numberOfBullets;
+            this.spawnBehaviour = spawnBehaviour;
+
+            counter = numberOfBullets;
+            timer = 0;
+            angle = spawnBehaviour.getStartAngle();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            if ((timer % spawnBehaviour.getInterval() == 0) && (counter > 0))
+            {
+                Pattern.Add(new PolarBullet(bulletType, bulletMovement, spawnPosition, angle, path, Content));
+                counter++;
+                angle = angle + spawnBehaviour.getRotation();
+            }
+
+            timer++;
+        }
+    }
+
+    class CirclePatterns : PolarPatterns
+    {
+        public CirclePatterns (int bulletType, PolarBulletMovement bulletMovement, Vector2 spawnPosition, int numberOfBullets)
+        {
+            this.bulletType = bulletType;
+            this.bulletMovement = bulletMovement;
+            this.spawnPosition = spawnPosition;
+            this.numberOfBullets = numberOfBullets;
+            spawnPattern();
+        }
+
+        private void spawnPattern()
+        {
+            float angle = 360 / numberOfBullets;
+
+            for (int i = 0; i < numberOfBullets; i++)
+            {
+                Pattern.Add(new PolarBullet(bulletType, bulletMovement, spawnPosition, angle * i, path, Content));
+            }
+        }
+    }
 }
