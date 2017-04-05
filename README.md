@@ -1,3 +1,3 @@
 # FLawless
 
-uses: VS17 and MonoGame 3.6
+uses MonoGame 3.6
